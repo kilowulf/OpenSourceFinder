@@ -1,0 +1,27 @@
+username: kilonow1275
+password: zrALSHSBFcWJ6J0j
+
+data API:
+url endpoint: https://us-west-2.aws.data.mongodb-api.com/app/data-zndpm/endpoint/data/v1
+
+
+
+Mongo compass:
+url: mongodb+srv://kilonow1275:zrALSHSBFcWJ6J0j@opensourcefindercluster.eq7x2lf.mongodb.net/test
+
+
+
+Github Personal Access Token: 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
+
+vscode mongodb string: mongodb+srv://kilonow1275:zrALSHSBFcWJ6J0j@opensourcefindercluster.eq7x2lf.mongodb.net/test
+In VS Code, open the Command Palette.
+Click on "View" and open "Command Palette."
+Search "MongoDB: Connect" on the Command Palette and click on "Connect with Connection String."
+Connect to your MongoDB deployment.
+Paste your connection string into the Command Palette.
+
+mongodb+srv://kilonow1275:<password>@opensourcefindercluster.eq7x2lf.mongodb.net/test
+
+Replace <password> with the password for the kilonow1275 user.
+When entering your password, make sure all special characters are URL encoded. 
+Click "Create New Playground" in MongoDB for VS Code to get started.
