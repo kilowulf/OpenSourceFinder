@@ -15,7 +15,11 @@ dist-ssr
 
 
 .vscode/*
+<<<<<<< HEAD
 
+=======
+.env
+>>>>>>> 20c29a9ffb06c784a6c4a9400ed854f6244563b1
 !.vscode/extensions.json
 .idea
 .DS_Store
