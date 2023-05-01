@@ -1,4 +1,4 @@
-.env
+
 logs
 *.log
 npm-debug.log*
@@ -6,19 +6,16 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+# dependencies
 node_modules
-.env
 dist
 dist-ssr
 *.local
-
-
 .vscode/*
 <<<<<<< HEAD
 
 =======
-.env
+
 >>>>>>> 20c29a9ffb06c784a6c4a9400ed854f6244563b1
 !.vscode/extensions.json
 .idea
@@ -29,4 +26,6 @@ dist-ssr
 *.sln
 *.sw?
 
+# secret
+.env
 
