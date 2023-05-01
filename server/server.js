@@ -7,9 +7,6 @@ import session from "express-session";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
-// import User from "../src/models/User.js";
-// import connectDB from "./db.js";
-
 import { config as dotenvConfig } from "dotenv";
 dotenvConfig();
 dotenv.config();
@@ -64,8 +61,6 @@ const PAT = process.env.GITHUB_PERSONAL_ACCESS_TOKEN;
 // Connect to the MongoDB database: make sure DB connection occurs before references to models
 // otherwise you get model method timeouts ie insertOne() buffer timeouts
 
-// import User from "../src/models/User.js";
-
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
@@ -83,23 +78,11 @@ app.use((req, res, next) => {
   );
   next();
 });
-// passportConfig(passport);
-// app.use(passport.initialize());
-// app.use(passport.session());
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// // routes
-// import authRoutes from "../src/routes/auth.js";
-// import profileRoutes from "../src/routes/profile.js";
-// import userRoutes from "../src/routes/user.js";
-
-// // After other route definitions
-// app.use("/api/user", userRoutes);
-// app.use("/api/auth", authRoutes);
-// app.use("/api/profile", profileRoutes);
 
 app.post("/search", async (req, res) => {
   const { languages, labels, frameworks } = req.body;

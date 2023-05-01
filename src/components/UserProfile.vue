@@ -215,9 +215,6 @@ export default {
     user() {
       return this.getUserData;
     },
-    // getUserData() {
-    //   return this.$store.getters.getUserData;
-    // },
     getProjects() {
       return this.$store.getters.getUserProjects;
     },
@@ -241,9 +238,7 @@ export default {
     async fetchUserData() {
       try {
         const userId = this.$store.state.userId; // Fetch the user ID from local storage
-        // if (!userId) {
-        //   throw new Error("User ID is missing.");
-        // }
+
         const response = await axios.get(
           `http://localhost:3000/api/user/${userId}`
         );
@@ -254,9 +249,6 @@ export default {
       }
     },
 
-    // generateId() {
-    //   return "_" + Math.random().toString(36).substr(2, 9);
-    // },
     removeProject(projectId) {
       this.$store.dispatch("removeUserProject", projectId);
     },
@@ -331,61 +323,18 @@ export default {
     },
     initializeEditedUser() {
       this.editedUser = JSON.parse(JSON.stringify(this.user));
-
-      // this.languageOptions.forEach((lang) => {
-      //   lang.selected = this.getUserData.languages.includes(lang.value);
-      // });
-
-      // this.labelOptions.forEach((label) => {
-      //   label.selected = this.getUserData.labels.includes(label.value);
-      // });
-
-      // const languages = this.languageOptions
-      //   .filter((lang) => lang.selected)
-      //   .map((lang) => lang.value);
-
-      // const labels = this.labelOptions
-      //   .filter((label) => label.selected)
-      //   .map((label) => label.value);
-
-      // this.editedUser = {
-      //   id: this.user._id, // Include the id property from getUserData
-      //   ...this.getUserData,
-      //   languages,
-      //   labels
-      // };
     }
   },
   watch: {
     user() {
       this.initializeEditedUser();
     }
-    // getUserData: {
-    //   deep: true,
-    //   immediate: true,
-    //   handler(userData) {
-    //     if (userData) {
-    //       this.editedUser = JSON.parse(JSON.stringify(userData));
-    //     }
-    //   }
-    // }
   },
   created: async function () {
     // lifecycle hook
     await this.fetchUserData();
     this.initializeEditedUser();
     console.log("User data:", this.user);
-
-    // Initialize editedUser with values from getUserData when the component is created
-    // if (this.getUserData) {
-    //   this.initializeEditedUser();
-    // }
-    // Call the fetchUserData method to get the user data from the API
-
-    // Load user data from the server when the component is created
-    // if (!this.getUserData) {
-    //   this.$store.dispatch("loadUserData", this.user._id);
-    // }
   }
 };
 </script>
