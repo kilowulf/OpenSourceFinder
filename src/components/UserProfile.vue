@@ -215,9 +215,9 @@ export default {
     user() {
       return this.getUserData;
     },
-    getUserData() {
-      return this.$store.getters.getUserData;
-    },
+    // getUserData() {
+    //   return this.$store.getters.getUserData;
+    // },
     getProjects() {
       return this.$store.getters.getUserProjects;
     },
@@ -228,10 +228,6 @@ export default {
   methods: {
     ...mapActions(["updateUserData", "addUserProject", "saveUserData"]),
     async submitForm() {
-      if (!this.editedUser.id) {
-        this.editedUser.id = this.generateId();
-      }
-
       this.saveChanges();
       await this.$store.dispatch("saveUserData");
     },
@@ -244,20 +240,23 @@ export default {
     },
     async fetchUserData() {
       try {
-        const userId = localStorage.getItem("userId"); // Fetch the user ID from local storage
-        if (!userId) {
-          throw new Error("User ID is missing.");
-        }
-        const response = await axios.get(`/api/user/${userId}`);
-        this.user = response.data;
+        const userId = this.$store.state.userId; // Fetch the user ID from local storage
+        // if (!userId) {
+        //   throw new Error("User ID is missing.");
+        // }
+        const response = await axios.get(
+          `http://localhost:3000/api/user/${userId}`
+        );
+        console.log("from fetchUserData: userProfile.vue", response.data);
+        this.$store.dispatch("updateUserData", response.data);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     },
 
-    generateId() {
-      return "_" + Math.random().toString(36).substr(2, 9);
-    },
+    // generateId() {
+    //   return "_" + Math.random().toString(36).substr(2, 9);
+    // },
     removeProject(projectId) {
       this.$store.dispatch("removeUserProject", projectId);
     },
@@ -311,8 +310,10 @@ export default {
       try {
         const response = await axios.post("http://localhost:3000/search", {
           languages,
-          labels
+          labels,
+          frameworks: null
         });
+        console.log("Request body:", response.data);
         // Navigate to VisualizationChart.vue and pass the data as a prop
         this.$router.push({
           name: "SearchProjects",
@@ -329,53 +330,62 @@ export default {
       }
     },
     initializeEditedUser() {
-      this.languageOptions.forEach((lang) => {
-        lang.selected = this.getUserData.languages.includes(lang.value);
-      });
+      this.editedUser = JSON.parse(JSON.stringify(this.user));
 
-      this.labelOptions.forEach((label) => {
-        label.selected = this.getUserData.labels.includes(label.value);
-      });
+      // this.languageOptions.forEach((lang) => {
+      //   lang.selected = this.getUserData.languages.includes(lang.value);
+      // });
 
-      const languages = this.languageOptions
-        .filter((lang) => lang.selected)
-        .map((lang) => lang.value);
+      // this.labelOptions.forEach((label) => {
+      //   label.selected = this.getUserData.labels.includes(label.value);
+      // });
 
-      const labels = this.labelOptions
-        .filter((label) => label.selected)
-        .map((label) => label.value);
+      // const languages = this.languageOptions
+      //   .filter((lang) => lang.selected)
+      //   .map((lang) => lang.value);
 
-      this.editedUser = {
-        id: this.getUserData.id, // Include the id property from getUserData
-        ...this.getUserData,
-        languages,
-        labels
-      };
+      // const labels = this.labelOptions
+      //   .filter((label) => label.selected)
+      //   .map((label) => label.value);
+
+      // this.editedUser = {
+      //   id: this.user._id, // Include the id property from getUserData
+      //   ...this.getUserData,
+      //   languages,
+      //   labels
+      // };
     }
   },
   watch: {
-    getUserData: {
-      immediate: true,
-      handler(userData) {
-        if (userData) {
-          this.editedUser = JSON.parse(JSON.stringify(userData));
-        }
-      }
-    }
-  },
-  created() {
-    // lifecycle hook
-
-    // Initialize editedUser with values from getUserData when the component is created
-    if (this.getUserData) {
+    user() {
       this.initializeEditedUser();
     }
+    // getUserData: {
+    //   deep: true,
+    //   immediate: true,
+    //   handler(userData) {
+    //     if (userData) {
+    //       this.editedUser = JSON.parse(JSON.stringify(userData));
+    //     }
+    //   }
+    // }
+  },
+  created: async function () {
+    // lifecycle hook
+    await this.fetchUserData();
+    this.initializeEditedUser();
+    console.log("User data:", this.user);
+
+    // Initialize editedUser with values from getUserData when the component is created
+    // if (this.getUserData) {
+    //   this.initializeEditedUser();
+    // }
     // Call the fetchUserData method to get the user data from the API
-    this.fetchUserData();
+
     // Load user data from the server when the component is created
-    if (!this.getUserData) {
-      this.$store.dispatch("loadUserData", this.user.userId);
-    }
+    // if (!this.getUserData) {
+    //   this.$store.dispatch("loadUserData", this.user._id);
+    // }
   }
 };
 </script>

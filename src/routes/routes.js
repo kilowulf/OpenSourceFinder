@@ -31,6 +31,11 @@ const routes = [
     path: "/project/:id",
     name: "Project",
     component: Project
+  },
+  {
+    path: "/user/:id",
+    name: "UserProfileById",
+    component: UserProfile
   }
 ];
 

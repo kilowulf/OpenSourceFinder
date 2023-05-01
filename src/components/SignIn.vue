@@ -60,6 +60,7 @@ export default {
           email: this.email,
           password: this.password
         });
+
         this.$router.push({ name: "SearchProjects" });
       } catch (error) {
         this.error = "Invalid email or password";
