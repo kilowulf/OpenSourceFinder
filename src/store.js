@@ -1,5 +1,6 @@
 import { createStore } from "vuex";
 import axios from "axios";
+// import User from "../models/User.js";
 
 const store = createStore({
   state: {
@@ -17,8 +18,8 @@ const store = createStore({
       commit("setUser", user);
     },
 
-    setUserLoggedIn({ commit }, loggedIn) {
-      commit("setUserLoggedIn", loggedIn);
+    setUserLoggedIn(state, userLoggedIn) {
+      state.userLoggedIn = userLoggedIn;
     },
     updateProjectsData({ commit }, data) {
       commit("setProjectsData", data);
@@ -59,7 +60,7 @@ const store = createStore({
     async createUser({ commit }, userData) {
       try {
         const response = await axios.post("/api/user/create", userData);
-        commit("setUserData", response.data);
+        commit("setUserData", response.data.User);
       } catch (error) {
         console.error("Error creating user:", error);
       }
@@ -74,9 +75,9 @@ const store = createStore({
           email,
           password
         });
-        commit("setUser", response.data.user);
+        console.log("from store login", response.data);        
         commit("setUserLoggedIn", true);
-        localStorage.setItem("userId", response.data.user._id);
+        localStorage.setItem("userId", response.data.User._id);
       } catch (error) {
         console.error("Error during login:", error.message);
         throw error;
@@ -84,10 +85,11 @@ const store = createStore({
     },
     async register({ commit }, userData) {
       try {
-        const response = await axios.post("/api/auth/register", userData);
-        commit("setUser", response.data.user);
+        const response = await axios.post("/api/user/register", userData);
+
+        commit("setUser", response.data.User);
         commit("setUserLoggedIn", true);
-        localStorage.setItem("userId", response.data.user._id);
+        localStorage.setItem("userId", response.data.User._id);
       } catch (error) {
         console.error("Error during registration:", error.message);
         throw error;
@@ -98,11 +100,15 @@ const store = createStore({
     setUser(state, user) {
       state.user = user;
     },
+    setUserData(state, userData) {
+      state.user = userData;
+    },
     setUserId(state, userId) {
       state.userId = userId;
     },
-    setUserLoggedIn(state, loggedIn) {
-      state.userLoggedIn = loggedIn;
+    setUserLoggedIn(state, userData) {
+      state.userLoggedIn = true;
+      state.user = userData;
     },
     setProjectsData(state, data) {
       state.projectsData = data;
