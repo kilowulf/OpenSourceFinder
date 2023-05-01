@@ -5,7 +5,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import session from "express-session";
 import mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import { config as dotenvConfig } from "dotenv";
 dotenvConfig();
