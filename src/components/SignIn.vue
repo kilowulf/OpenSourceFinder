@@ -26,6 +26,8 @@
       >
         Sign In
       </button>
+      <!-- Add error message below the button -->
+      <p v-if="error" class="text-red-600 mt-4">{{ error }}</p>
     </form>
     <div class="mt-4">
       <p>

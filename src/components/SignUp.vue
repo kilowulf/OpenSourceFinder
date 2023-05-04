@@ -117,7 +117,7 @@ export default {
   methods: {
     //  ...mapMutations(['setUser', 'setUserLoggedIn']),
     ...mapActions(["updateUserData", "setUser", "setUserLoggedIn", "register"]),
-
+    ...mapMutations(["setRegistrationData"]),
     async submitForm() {
       try {
         const userData = {
@@ -134,6 +134,7 @@ export default {
         };
 
         await this.register(userData);
+        this.setRegistrationData(userData);
         this.$router.push({ name: "UserProfile" });
       } catch (error) {
         console.error("Error during registration:", error);

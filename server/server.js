@@ -97,14 +97,14 @@ app.post("/search", async (req, res) => {
   const queryParts = [
     languageQuery,
     labelQuery,
-    frameworkQuery,
-    "stars:>0"
+    frameworkQuery
+    // "stars:>0"
   ].filter(Boolean);
 
   const searchQuery = queryParts.join(" ");
   const requestUrl = `https://api.github.com/search/repositories?q=${encodeURIComponent(
     searchQuery
-  )}&sort=stars&order=desc`;
+  )}+is:open+is:public&sort=stars&order=desc`;
 
   try {
     const { data } = await axios.get(requestUrl, {
@@ -129,7 +129,7 @@ app.post("/api/user/register", async (req, res) => {
       _id: new mongoose.Types.ObjectId(),
       username: userData.username,
       email: userData.email,
-      password: hashedPassword,
+      password: userData.password,
       occupation: userData.occupation,
       languages: userData.languages,
       labels: userData.labels
@@ -144,6 +144,7 @@ app.post("/api/user/register", async (req, res) => {
   }
 });
 
+// find user in database
 app.get("/api/user/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -158,13 +159,41 @@ app.get("/api/user/:id", async (req, res) => {
   }
 });
 
+// update user data in database
+app.put("/api/user/:id", async (req, res) => {
+  const userId = req.params.id;
+  const updateData = req.body;
+
+  // if (updateData.password) {
+  //   updateData.password = await bcrypt.hash(updateData.password, 10);
+  // }
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, updateData, {
+      new: true
+    });
+
+    if (user) {
+      res
+        .status(200)
+        .json({ message: "User updated successfully.", User: user });
+    } else {
+      res.status(404).json({ error: "User not found." });
+    }
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ error: "Unable to update user data." });
+  }
+});
+
+// authenticate user by email and password
 app.post("/api/auth/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email: email });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
+    if (user && password === user.password) {
       res.status(200).json({ User: user });
     } else {
       res.status(401).json({ error: "Invalid email or password" });

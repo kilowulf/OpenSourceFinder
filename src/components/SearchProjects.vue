@@ -136,7 +136,7 @@ export default {
       totalPages: 1,
       languageOptions: [
         { label: "JavaScript", value: "javascript" },
-        { label: "Python", value: "python" },
+        { label: "Python", value: "py" },
         { label: "HTML", value: "html" }
       ],
       labelOptions: [

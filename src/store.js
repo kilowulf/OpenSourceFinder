@@ -6,6 +6,8 @@ const store = createStore({
   state: {
     userId: localStorage.getItem("userId") || null,
     user: null,
+    userData: null,
+    registrationData: null,
     userLoggedIn: false,
     projectsData: [],
     recommendedProjects: [],
@@ -75,7 +77,7 @@ const store = createStore({
           email,
           password
         });
-        console.log("from store login", response.data);        
+        console.log("from store login", response.data);
         commit("setUserLoggedIn", true);
         localStorage.setItem("userId", response.data.User._id);
       } catch (error) {
@@ -112,6 +114,9 @@ const store = createStore({
     },
     setProjectsData(state, data) {
       state.projectsData = data;
+    },
+    setRegistrationData(state, data) {
+      state.registrationData = data;
     },
     clearUserAuthentication(state) {
       state.user = null;

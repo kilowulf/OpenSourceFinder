@@ -210,10 +210,15 @@ export default {
       ]
     };
   },
+  mounted() {
+    if (this.$store.state.registrationData) {
+      this.saveUserDataToDatabase(this.$store.state.registrationData);
+    }
+  },
   computed: {
     ...mapGetters(["getUserData", "getUserProjects"]),
     user() {
-      return this.getUserData;
+      return this.$store.state.userData || this.getUserData;
     },
     getProjects() {
       return this.$store.getters.getUserProjects;
@@ -228,12 +233,25 @@ export default {
       this.saveChanges();
       await this.$store.dispatch("saveUserData");
     },
+    async saveUserDataToDatabase(userData) {
+      try {
+        // Save userData to the database
+        this.$store.commit("setUserData", userData);
+      } catch (error) {
+        console.error("Error saving user data to the database:", error);
+      }
+    },
     async saveChanges() {
       console.log("Save changes", this.editedUser);
       this.updateUserData(this.editedUser);
       await this.saveUserData(this.editedUser);
       this.isEditing = false;
       // Call API or update user information in state management
+      try {
+        await axios.put(`/api/user/${this.user._id}`, this.editedUser);
+      } catch (error) {
+        console.error("Error updating user data:", error);
+      }
     },
     async fetchUserData() {
       try {
